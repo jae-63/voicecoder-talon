@@ -1,8 +1,7 @@
-# Cache pad commands — active in all contexts.
+# Cache pad management — active in all contexts.
 -
 remember this:                                       user.voicecoder_cache_remember()
 cache word:                                          user.voicecoder_cache_remember()
-(cache | recent) <number>:                           user.voicecoder_cache_insert(number)
 forget cache <number>:                               user.voicecoder_cache_evict(number)
 clear cache:                                         user.voicecoder_cache_clear()
 show cache:                                          user.voicecoder_cache_show()

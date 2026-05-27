@@ -13,6 +13,7 @@ Commands (defined in cache_pad.talon):
 
 import json
 import pathlib
+import socket
 
 from talon import Context, Module, actions, app, imgui, settings
 
@@ -45,8 +46,18 @@ _cache: list[str] = []
 _gui_visible = False
 
 
+def _push_to_vscode() -> None:
+    try:
+        msg = json.dumps({"cmd": "syncCacheItems", "items": _cache}) + "\n"
+        with socket.create_connection(("127.0.0.1", 7890), timeout=0.5) as s:
+            s.sendall(msg.encode())
+    except Exception:
+        pass
+
+
 def _save() -> None:
     _STORE.write_text(json.dumps(_cache))
+    _push_to_vscode()
 
 
 def _load() -> None:
@@ -124,4 +135,8 @@ class Actions:
         return ""
 
 
-app.register("ready", lambda: _load())
+def _on_ready():
+    _load()
+    gui.show()
+
+app.register("ready", _on_ready)
